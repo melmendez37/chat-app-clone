@@ -1,18 +1,28 @@
 "use client";
 
-import { supabaseBrowser } from "@/lib/sufabase/browser";
+import { supabaseBrowser } from "@/lib/supabase/browser";
+import { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
-export default function ChatHeader(){
+export default function ChatHeader({user}:{user:User | undefined}){
 
-    const handleLoginWithGithub = () =>{
+  const router = useRouter();
+
+    const handleLoginWithGithub = () => {
         const supabase = supabaseBrowser();
         supabase.auth.signInWithOAuth({
             provider:"github",
             options:{
-                redirectTo:location.origin + "/auth/callback"
+                redirectTo: window.location.origin + "/auth/callback"
             }
         })
+    }
+
+    const handleLogout = async () => {
+        const supabase = supabaseBrowser();
+        await supabase.auth.signOut();
+        router.refresh();
     }
     return(
         <div className="h-20">
@@ -24,7 +34,11 @@ export default function ChatHeader(){
               <h1 className="text-sm text-gray-400">1 online</h1>
             </div>
           </div>
-          <Button onClick={handleLoginWithGithub}>Login</Button>
+          {user?(<Button onClick={handleLogout}>Logout</Button>) :
+            <Button onClick={handleLoginWithGithub}>Login</Button>
+          }
+          
+          
         </div>
 
       </div>
