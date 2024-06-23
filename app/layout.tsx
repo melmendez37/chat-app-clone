@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const space_Grotesk = Space_Grotesk({ subsets: ["latin"] });
@@ -24,6 +25,7 @@ export default function RootLayout({
         enableSystem
         disableTransitionOnChange>
           {children}
+          <Toaster position="top-center"/>
         </ThemeProvider>
         </body>
     </html>
