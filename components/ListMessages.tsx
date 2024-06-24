@@ -2,6 +2,7 @@
 
 import { useMessage } from "@/lib/store/messages"
 import Message from "./Message"
+import { DeleteAlert } from "./MessageActions"
 
 export default function ListMessages(){
 
@@ -20,9 +21,9 @@ export default function ListMessages(){
             
           })}
 
-          
-
         </div>
+
+        <DeleteAlert/>
 
       </div>
     )
