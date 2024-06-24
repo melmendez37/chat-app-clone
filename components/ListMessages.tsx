@@ -1,6 +1,7 @@
 "use client"
 
 import { useMessage } from "@/lib/store/messages"
+import Message from "./Message"
 
 export default function ListMessages(){
 
@@ -15,24 +16,8 @@ export default function ListMessages(){
 
           {messages.map((value, index)=>{
 
-            return(
-              <div className="flex gap-2" key={index}>
- 
-            <div className="h-10 w-10 bg-green-500 rounded-full"></div>
+            return <Message key={index} message={value}/>;
             
-            <div className="flex-1">
-              
-              <div className="flex items-center gap-1">
-                <h1 className="font-bold">Melman</h1>
-                <h1 className="text-sm text-gray-400">{new Date().toDateString()}</h1>
-              </div>
-
-              <p className="text-gray-400">SSR frameworks move rendering and data fetches to the server, to reduce client bundle size and execution time.</p>
-
-            </div>
-
-          </div>
-            )
           })}
 
           
