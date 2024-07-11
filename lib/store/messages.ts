@@ -32,7 +32,8 @@ export const useMessage = create<MessageState>()((set) => ({
   optimisticIds:[],
   actionMessage: undefined,
   setOptimisticIds:(id:string)=>
-    set((state)=>({optimisticIds:[...state.optimisticIds,id]})),
+    set((state)=>({optimisticIds:[...state.
+      optimisticIds,id]})),
   addMessage:(newMessages) => 
     set((state)=>({
       messages:[...state.messages, newMessages],

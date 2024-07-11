@@ -1,6 +1,6 @@
 "use client";
 
-import { Imessage, useMessage } from "@/lib/store/messages";
+import { useMessage } from "@/lib/store/messages";
 import { useUser } from "@/lib/store/user";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import { toast } from "sonner";
@@ -35,7 +35,7 @@ export default function ChatInput(){
                 },
             };
 
-            addMessage(newMessage as Imessage);
+            
             setOptimisticIds(newMessage.id);
 
             const {error} = await supabase.from("messages").insert({text});
