@@ -36,6 +36,7 @@ export default function ChatInput(){
             };
 
             
+            
             setOptimisticIds(newMessage.id);
 
             const {error} = await supabase.from("messages").insert({text});
