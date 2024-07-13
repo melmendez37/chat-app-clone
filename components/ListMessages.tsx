@@ -5,6 +5,7 @@ import { supabaseBrowser } from "@/lib/supabase/browser"
 import { MoveDown } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
+import LoadMoreMessages from "./LoadMoreMessages"
 import Message from "./Message"
 import { DeleteAlert, EditAlert } from "./MessageActions"
 
@@ -103,12 +104,14 @@ export default function ListMessages(){
 
     return(
       <>
-        <div className="flex-1 flex flex-col p-5 h-full overflow-y-auto"
+        <div className="flex-1 flex flex-col p-5 h-full overflow-y-auto gap-6 "
             ref={scrollRef}
             onScroll={handleOnScroll}>
             
 
-        <div className="flex-1"></div>
+        <div className="flex-1">
+          <LoadMoreMessages/>
+        </div>
         <div className="space-y-7">
 
           {messages.map((value, index)=>{
