@@ -14,6 +14,9 @@ export default function ListMessages(){
 
     const [userScroll, setUserScroll] = useState(false);
 
+    const [notification, setNotification] = useState(0);
+
+
     const {messages, addMessage, optimisticIds, optimisticDeleteMessage, optimisticUpdateMessage
     } = useMessage((state)=>state);
     const supabase = supabaseBrowser()
@@ -47,6 +50,13 @@ export default function ListMessages(){
                 
               }
             }
+            const scrollContainer = scrollRef.current;
+            if(scrollContainer.scrollTop <
+              scrollContainer.scrollHeight -
+              scrollContainer.clientHeight - 10){
+                setNotification((current)=>current + 1)
+              }
+            
         })
         .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, payload => {
           optimisticDeleteMessage(payload.old.id)
@@ -62,10 +72,8 @@ export default function ListMessages(){
     }, [messages]);
 
     useEffect(()=>{
-
-
       const scrollContainer = scrollRef.current;
-      if(scrollContainer){
+      if(scrollContainer && !userScroll){
         scrollContainer.scrollTop = scrollContainer.scrollHeight;
       }
     }, [messages])
@@ -79,14 +87,22 @@ export default function ListMessages(){
           scrollContainer.scrollHeight -
             scrollContainer.clientHeight - 10;
         setUserScroll(isScroll);
+        
+        if(scrollContainer.scrollTop ===
+          scrollContainer.scrollHeight -
+            scrollContainer.clientHeight){
+              setNotification(0);
+            }
       }
     };
 
     const scrollDown = () => {
+      setNotification(0);
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
 
     return(
+      <>
         <div className="flex-1 flex flex-col p-5 h-full overflow-y-auto"
             ref={scrollRef}
             onScroll={handleOnScroll}>
@@ -100,19 +116,37 @@ export default function ListMessages(){
             return <Message key={index} message={value}/>;
             
           })}
-
+          
         </div>
-          //the scroll down appears once you scroll up
-        {userScroll && (<div className="absolute bottom-20 right-1/2">
-          <div className="w-10 h-10 bg-blue-500 rounded-full justify-center items-center flex mx-auto 
-          border cursor-pointer hover:scale-100 transition-all" onClick={scrollDown}>
-            <MoveDown />
-          </div>
-        </div>)}
 
         <DeleteAlert/>
         <EditAlert/>
-
       </div>
+
+      {userScroll && (<div className="absolute bottom-20 w-full">
+        {notification ? (
+          <div 
+            className="w-36 mx-auto bg-indigo-500 p-1 rounded-md 
+            cursor-pointer hover:scale-110 transition-all"
+            onClick={scrollDown}
+          >
+
+            <h1>New {notification} messages</h1>
+
+          </div>
+
+        ) : (
+
+        <div className="
+        w-10 h-10 bg-blue-500 rounded-full justify-center 
+        items-center flex mx-auto border cursor-pointer 
+        hover:scale-100 transition-all" 
+        onClick={scrollDown}>
+          <MoveDown />
+        </div>)}
+        
+      </div>)}
+
+      </>
     )
 }
